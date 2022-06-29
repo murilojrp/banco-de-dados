@@ -1,0 +1,62 @@
+
+
+create table enderecos
+(
+    id serial primary key,
+    rua varchar(200),
+    bairro varchar(200),
+    numero int,
+    estado varchar(200),
+    uf varchar(200),
+    municipio varchar(200)
+);
+
+create table clientes
+(
+    id serial primary key,
+    nome varchar(200) not null,
+    cpf varchar(200) not null unique,
+    telefone varchar(200),
+    email varchar(200),
+    data_nascimento date,
+    id_endereco int not null unique,
+    constraint fk_id_endereco_to_clientes FOREIGN KEY(id_endereco) REFERENCES enderecos (id)
+
+);
+
+create table vendedores
+(
+    id serial primary key,
+    nome varchar(200) not null,
+    cpf varchar(200) not null unique,
+    telefone varchar(200),
+    email varchar(200),
+    data_nascimento date,
+    salario varchar(200) not null,
+    id_endereco int not null unique,
+    constraint fk_id_endereco_to_vendedores FOREIGN KEY(id_endereco) REFERENCES enderecos (id)
+
+);
+
+create table compra
+(
+    id serial primary key,
+    valor_total varchar(200),
+    data_compra date,
+    id_cliente int not null unique,
+    id_vendedor int not null unique,
+    constraint fk_id_cliente_to_compra FOREIGN KEY(id_cliente) REFERENCES clientes (id),
+    constraint fk_id_vendedor_to_compra FOREIGN KEY(id_vendedor) REFERENCES vendedores (id)
+);
+
+create table produtos_compra
+(
+    id serial primary key,
+    quantidade int,
+    valor_unitario varchar(200),
+    valor_total varchar(200),
+    id_produtos  int not null unique,
+    id_compra int not null unique,
+    constraint fk_id_produtos_to_produtos_compra  FOREIGN KEY(id_produtos) REFERENCES produtos (id),
+    constraint fk_id_compra_to_produtos_compra  FOREIGN KEY(id_compra) REFERENCES compra (id)
+);
